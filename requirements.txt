@@ -4,3 +4,6 @@ numpy
 seaborn
 matplotlib
 scikit-learn
+xgboost
+pickle
+pickle5
