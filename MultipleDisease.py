@@ -2,41 +2,43 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import time
-
 import pickle
+import os
+
 from sklearn import preprocessing
 from sklearn.ensemble import RandomForestClassifier
+BASE_DIR = os.path.dirname(__file__)
 
 #Initialize LableEncoder - Liver
-with open(r'labelencoder_liver.pkl', 'rb') as file_en_liver:
+with open(os.path.join(BASE_DIR, "labelencoder_liver.pkl"), "rb") as file_en_liver:
     encoder_liver = pickle.load(file_en_liver)
 
 #Initialize LableEncoder - Kidney
-with open(r'labelencoder_kidney.pkl', 'rb') as file_en_kidney:
+with open(os.path.join(BASE_DIR,'labelencoder_kidney.pkl', 'rb') as file_en_kidney:
     encoder_kidney = pickle.load(file_en_kidney)
 
 #Initialize Scaler - Liver
-with open('scaler_liver.pkl', 'rb') as scalerfile_liver:
+with open(os.path.join(BASE_DIR, "scaler_liver.pkl"), "rb") as scalerfile_liver:
     scaler_liver = pickle.load(scalerfile_liver)
 
 #Initialize Scaler - Kidney
-with open('scaler_kidney.pkl', 'rb') as scalerfile_kidney:
+with open(os.path.join(BASE_DIR,'scaler_kidney.pkl', 'rb') as scalerfile_kidney:
     scaler_kidney = pickle.load(scalerfile_kidney)
 
 #Initialize Scaler - Parkinsons
-with open('scaler_parkins.pkl', 'rb') as scalerfile_parkins:
+with open(os.path.join(BASE_DIR,'scaler_parkins.pkl', 'rb') as scalerfile_parkins:
     scaler_parkinsons = pickle.load(scalerfile_parkins)
 
 # Loading the models - Liver
-with open(r'randomfor_liver.pkl', 'rb') as file_liver:
+with open(os.path.join(BASE_DIR,'randomfor_liver.pkl', 'rb') as file_liver:
     liver_model = pickle.load(file_liver)
 
 # Loading the models - Kidney
-with open(r'randomfor_kidney.pkl', 'rb') as file_kidney:
+with open(os.path.join(BASE_DIR,'randomfor_kidney.pkl', 'rb') as file_kidney:
     kidney_model = pickle.load(file_kidney)
 
 # Loading the models - Parkinsons
-with open(r'randomfor_parkins.pkl', 'rb') as file_parkins:
+with open(os.path.join(BASE_DIR,'randomfor_parkins.pkl', 'rb') as file_parkins:
     parkinsons_model = pickle.load(file_parkins)
 
 # Streamlit UI name
@@ -310,4 +312,5 @@ if disease == "Parkinson's Disease":
             st.success("💼 Great news! You are healthy and no signs of disease were detected.")
         else:
             st.warning("🩺 Attention: Signs of disease risk detected. Follow up with your doctor for detailed diagnosis.")
+
 
