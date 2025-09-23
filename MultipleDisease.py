@@ -175,9 +175,9 @@ if disease == 'Liver Disease':
 
         if prediction[0]==0:
             st.balloons()
-            st.success("💼 Great news! Your are healthy")
+            st.success("🎉 You are doing well! No disease detected at this time.")
         else:
-            st.warning("🚨Risk Alert: You need to check and take care of your health")
+            st.warning("🩺 Attention: Signs of disease risk detected. Follow up with your doctor for detailed diagnosis.")
 
 
 
@@ -246,9 +246,9 @@ if disease == 'Kidney Disease':
 
         if prediction[0]==0:
             st.balloons()
-            st.success("💼 Great news! Your are healthy")
+            st.success("✅ Your health looks good! Keep maintaining a healthy lifestyle.")
         else:
-            st.warning("🚨Risk Alert: You need to check and take care of your health")
+            st.warning("🩺 Attention: Signs of disease risk detected. Follow up with your doctor for detailed diagnosis.")
 
 
 if disease == "Parkinson's Disease":
@@ -309,6 +309,6 @@ if disease == "Parkinson's Disease":
 
         if prediction[0]==0:
             st.balloons()
-            st.success("💼 Great news! Your are healthy")
+            st.success("💼 Great news! You are healthy and no signs of disease were detected.")
         else:
-            st.warning("🚨Risk Alert: You need to check and take care of your health")
+            st.warning("🩺 Attention: Signs of disease risk detected. Follow up with your doctor for detailed diagnosis.")
