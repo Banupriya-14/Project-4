@@ -92,8 +92,223 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-st.markdown('<h1 class="main-title"> 🩺 Multiple Disease Prediction</h1>', unsafe_allow_html=True)
-st.markdown('<p class="sub-title">⚕️A scalable AI-powered system for early disease detection 🤖, enabling faster ⚡, cost-effective 💰, and accurate ✅ healthcare decisions.</p>', unsafe_allow_html=True)
-
 st.sidebar.title(" 📊 Disease Prediction Options")
-disease = st.sidebar.radio("⚕️ Select Disease Prediction", ("Liver Disease", "Kidney Disease", "Parkinson's Disease"))
+disease = st.sidebar.radio("⚕️ Select Disease Prediction", ("🏠 Home","Liver Disease", "Kidney Disease", "Parkinson's Disease"))
+
+
+if disease == '🏠 Home':
+    st.markdown('<h1 class="main-title"> 🩺 Multiple Disease Prediction</h1>', unsafe_allow_html=True)
+    st.markdown('<p class="sub-title">⚕️A scalable AI-powered system for early disease detection 🤖, enabling faster ⚡, cost-effective 💰, and accurate ✅ healthcare decisions.</p>', unsafe_allow_html=True)
+
+
+
+if disease == 'Liver Disease':
+    st.markdown(
+    """
+    <h3 style='text-align: center; color: #0B4242; text-shadow: 2px 2px 5px gray; word-spacing: 5px; border: 2px solid #333;
+    border-radius: 8px; box-shadow: 2px 2px 5px rgba(0,0,0,0.3); background-color: #F5F5F5;
+    padding: 10px; margin: 15px;'>
+        🫀 Liver Disease Prediction
+    </h3>
+    """,
+    unsafe_allow_html=True)
+
+
+    # Features
+    liver_features = [
+        'Age', 'Gender', 'Total_Bilirubin', 'Direct_Bilirubin',
+        'Alkaline_Phosphotase', 'Alamine_Aminotransferase',
+        'Aspartate_Aminotransferase', 'Total_Protiens', 'Albumin',
+        'Albumin_and_Globulin_Ratio'
+    ]
+
+    st.markdown(
+    """
+    <h3 style='text-align: center; color: #941F1F; font-style: italic; font-weight: normal; font-size: 24px;'>
+        Enter Patient Details
+    </h3>
+    """,
+    unsafe_allow_html=True)
+
+    col1, col2, col3 = st.columns(3)
+    user_data = {}
+
+    for i, feature in enumerate(liver_features):
+        if i % 3 == 0:
+            col = col1
+        elif i % 3 == 1:
+            col = col2
+        else:
+            col = col3
+
+        if feature == "Gender":
+            # Use same categories your encoder was trained on
+            # Access the encoder for Gender
+            gender_encoder = encoder_liver["Gender"]
+
+            categories = list(gender_encoder.classes_)
+            user_input = col.selectbox("Gender", categories)
+
+            # Encode using the trained encoder
+            user_data[feature] = gender_encoder.transform([user_input])[0]
+        else:
+            user_data[feature] = col.number_input(
+                f"{feature}", min_value=0.0, format="%.2f"
+            )
+
+    # Convert to DataFrame
+    input_df = pd.DataFrame([user_data])
+
+    st.write("📊 Input Data for Prediction:")
+    st.dataframe(input_df)
+
+    left, mid, right = st.columns(3)
+
+    if user_data and mid.button("🔍 Predict Disease"):
+
+        input_data = input_df[liver_features].values 
+
+        input_scaled = scaler_liver.transform(input_data)
+
+
+        prediction = liver_model.predict(input_scaled)
+
+        if prediction[0]==0:
+            st.balloons()
+            st.success("💼 Great news! Your are healthy")
+        else:
+            st.warning("🚨Risk Alert: You need to check and take care of your health")
+
+
+
+if disease == 'Kidney Disease':
+    st.markdown(
+    """
+    <h3 style='text-align: center; color: #0A4461; text-shadow: 2px 2px 5px gray; word-spacing: 5px; border: 2px solid #333;
+    border-radius: 8px; box-shadow: 2px 2px 5px rgba(0,0,0,0.3); background-color: #F5F5F5;
+    padding: 10px; margin: 15px;'>
+        💧 Kidney Disease
+    </h3>
+    """,
+    unsafe_allow_html=True)
+
+
+    # Features
+    kidney_features = ['age', 'bp', 'sg', 'al', 'su', 'rbc', 'pc', 'pcc', 'ba', 'bgr', 'bu',
+       'sc', 'sod', 'pot', 'hemo', 'pcv', 'wc', 'rc', 'htn', 'dm', 'cad',
+       'appet', 'pe', 'ane']
+
+    st.markdown(
+    """
+    <h3 style='text-align: center; color: #941F1F; font-style: italic; font-weight: normal; font-size: 24px;'>
+        Enter Patient Details
+    </h3>
+    """,
+    unsafe_allow_html=True)
+
+    col1, col2, col3 = st.columns(3)
+    user_data = {}
+
+    for i, feature in enumerate(kidney_features):
+        if i % 3 == 0:
+            col = col1
+        elif i % 3 == 1:
+            col = col2
+        else:
+            col = col3
+
+        if feature in encoder_kidney:
+            feature_encoder = encoder_kidney[feature]
+            categories = list(feature_encoder.classes_)
+            user_input = col.selectbox(feature, categories)
+            user_data[feature] = feature_encoder.transform([user_input])[0]
+        else:
+            user_data[feature] = col.number_input(
+                f"{feature}", min_value=0.0, format="%.2f"
+            )
+
+    # Convert to DataFrame
+    input_df = pd.DataFrame([user_data])
+
+    st.write("📊 Input Data for Prediction:")
+    st.dataframe(input_df)
+
+    left, mid, right = st.columns(3)
+
+    if user_data and mid.button("🔍 Predict Disease"):
+
+        input_data = input_df[kidney_features].values 
+
+        input_scaled = scaler_kidney.transform(input_data)
+
+
+        prediction = kidney_model.predict(input_scaled)
+
+        if prediction[0]==0:
+            st.balloons()
+            st.success("💼 Great news! Your are healthy")
+        else:
+            st.warning("🚨Risk Alert: You need to check and take care of your health")
+
+
+if disease == "Parkinson's Disease":
+    st.markdown(
+    """
+    <h3 style='text-align: center; color: #400733; text-shadow: 2px 2px 5px gray; word-spacing: 5px; border: 2px solid #333;
+    border-radius: 8px; box-shadow: 2px 2px 5px rgba(0,0,0,0.3); background-color: #F5F5F5;
+    padding: 10px; margin: 15px;'>
+        🧠 Parkinson’s Disease
+    </h3>
+    """,
+    unsafe_allow_html=True)
+
+
+    # Features
+    parkins_features = ['MDVP_Fo_Hz', 'MDVP_Fhi_Hz', 'MDVP_Flo_Hz', 'MDVP_Jitter_%',
+       'MDVP_Jitter_Abs', 'MDVP_RAP', 'MDVP_PPQ', 'Jitter_DDP', 'MDVP_Shimmer',
+       'MDVP_Shimmer_dB', 'Shimmer_APQ3', 'Shimmer_APQ5', 'NHR', 'HNR', 'PPE']
+
+    st.markdown(
+    """
+    <h3 style='text-align: center; color: #941F1F; font-style: italic; font-weight: normal; font-size: 24px;'>
+        Enter Patient Details
+    </h3>
+    """,
+    unsafe_allow_html=True)
+
+    col1, col2, col3 = st.columns(3)
+    user_data = {}
+
+    for i, feature in enumerate(parkins_features):
+        if i % 3 == 0:
+            col = col1
+        elif i % 3 == 1:
+            col = col2
+        else:
+            col = col3
+
+        user_data[feature] = col.number_input(
+            f"{feature}", min_value=0.0, format="%.2f")
+
+    # Convert to DataFrame
+    input_df = pd.DataFrame([user_data])
+
+    st.write("📊 Input Data for Prediction:")
+    st.dataframe(input_df)
+
+    left, mid, right = st.columns(3)
+
+    if user_data and mid.button("🔍 Predict Disease"):
+
+        input_data = input_df[parkins_features].values 
+
+        input_scaled = scaler_parkinsons.transform(input_data)
+
+
+        prediction = parkinsons_model.predict(input_scaled)
+
+        if prediction[0]==0:
+            st.balloons()
+            st.success("💼 Great news! Your are healthy")
+        else:
+            st.warning("🚨Risk Alert: You need to check and take care of your health")
