@@ -93,16 +93,16 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 st.sidebar.title(" 📊 Disease Prediction Options")
-disease = st.sidebar.radio("⚕️ Select Disease Prediction", ("🏠 Home","Liver Disease", "Kidney Disease", "Parkinson's Disease"))
+disease = st.sidebar.radio("⚕️ Select Disease Prediction", ("🏠 Home","🫀 Liver Disease", "💧 Kidney Disease", "🧠 Parkinson’s Disease"))
 
 
 if disease == '🏠 Home':
-    st.markdown('<h1 class="main-title"> 🩺 Multiple Disease Prediction</h1>', unsafe_allow_html=True)
+    st.markdown('<h1 class="main-title"> 🩺 Multiple Disease Prediction 🏥</h1>', unsafe_allow_html=True)
     st.markdown('<p class="sub-title">⚕️A scalable AI-powered system for early disease detection 🤖, enabling faster ⚡, cost-effective 💰, and accurate ✅ healthcare decisions.</p>', unsafe_allow_html=True)
 
 
 
-if disease == 'Liver Disease':
+if disease == '🫀 Liver Disease':
     st.markdown(
     """
     <h3 style='text-align: center; color: #0B4242; text-shadow: 2px 2px 5px gray; word-spacing: 5px; border: 2px solid #333;
@@ -181,7 +181,7 @@ if disease == 'Liver Disease':
 
 
 
-if disease == 'Kidney Disease':
+if disease == '💧 Kidney Disease':
     st.markdown(
     """
     <h3 style='text-align: center; color: #0A4461; text-shadow: 2px 2px 5px gray; word-spacing: 5px; border: 2px solid #333;
@@ -251,7 +251,7 @@ if disease == 'Kidney Disease':
             st.warning("🩺 Attention: Signs of disease risk detected. Follow up with your doctor for detailed diagnosis.")
 
 
-if disease == "Parkinson's Disease":
+if disease == "🧠 Parkinson’s Disease":
     st.markdown(
     """
     <h3 style='text-align: center; color: #400733; text-shadow: 2px 2px 5px gray; word-spacing: 5px; border: 2px solid #333;
@@ -312,6 +312,8 @@ if disease == "Parkinson's Disease":
             st.success("💼 Great news! You are healthy and no signs of disease were detected.")
         else:
             st.warning("🩺 Attention: Signs of disease risk detected. Follow up with your doctor for detailed diagnosis.")
+
+
 
 
 
