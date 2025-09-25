@@ -6,7 +6,7 @@ import time
 import pickle
 from sklearn import preprocessing
 from sklearn.ensemble import RandomForestClassifier
-BASE_DIR = os.path.dirname(__file__)
+BASE_DIR = os.getcwd()
 
 #Initialize LableEncoder - Liver
 with open(os.path.join(BASE_DIR,'labelencoder_liver.pkl'), 'rb') as file_en_liver:
@@ -325,4 +325,5 @@ if disease == "🧠 Parkinson’s Disease":
             st.success("💼 Great news! You are healthy and no signs of disease were detected.")
         else:
             st.warning("🩺 Attention: Signs of disease risk detected. Follow up with your doctor for detailed diagnosis.")
+
 
