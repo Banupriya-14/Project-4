@@ -2,43 +2,41 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import time
-import pickle
-import os
 
+import pickle
 from sklearn import preprocessing
 from sklearn.ensemble import RandomForestClassifier
-BASE_DIR = os.path.dirname(__file__)
 
 #Initialize LableEncoder - Liver
-with open(os.path.join(BASE_DIR, "labelencoder_liver.pkl"), "rb") as file_en_liver:
+with open(r'E:\MDTM40\Project4_MultipleDisease\labelencoder_liver.pkl', 'rb') as file_en_liver:
     encoder_liver = pickle.load(file_en_liver)
 
 #Initialize LableEncoder - Kidney
-with open(os.path.join(BASE_DIR,'labelencoder_kidney.pkl'), 'rb') as file_en_kidney:
+with open(r'E:\MDTM40\Project4_MultipleDisease\labelencoder_kidney.pkl', 'rb') as file_en_kidney:
     encoder_kidney = pickle.load(file_en_kidney)
 
 #Initialize Scaler - Liver
-with open(os.path.join(BASE_DIR, "scaler_liver.pkl"), "rb") as scalerfile_liver:
+with open('E:\MDTM40\Project4_MultipleDisease\scaler_liver.pkl', 'rb') as scalerfile_liver:
     scaler_liver = pickle.load(scalerfile_liver)
 
 #Initialize Scaler - Kidney
-with open(os.path.join(BASE_DIR,'scaler_kidney.pkl'), 'rb') as scalerfile_kidney:
+with open('E:\MDTM40\Project4_MultipleDisease\scaler_kidney.pkl', 'rb') as scalerfile_kidney:
     scaler_kidney = pickle.load(scalerfile_kidney)
 
 #Initialize Scaler - Parkinsons
-with open(os.path.join(BASE_DIR,'scaler_parkins.pkl'), 'rb') as scalerfile_parkins:
+with open('E:\MDTM40\Project4_MultipleDisease\scaler_parkins.pkl', 'rb') as scalerfile_parkins:
     scaler_parkinsons = pickle.load(scalerfile_parkins)
 
 # Loading the models - Liver
-with open(os.path.join(BASE_DIR,'randomfor_liver.pkl'), 'rb') as file_liver:
+with open(r'E:\MDTM40\Project4_MultipleDisease\randomfor_liver.pkl', 'rb') as file_liver:
     liver_model = pickle.load(file_liver)
 
 # Loading the models - Kidney
-with open(os.path.join(BASE_DIR,'randomfor_kidney.pkl'), 'rb') as file_kidney:
+with open(r'E:\MDTM40\Project4_MultipleDisease\randomfor_kidney.pkl', 'rb') as file_kidney:
     kidney_model = pickle.load(file_kidney)
 
 # Loading the models - Parkinsons
-with open(os.path.join(BASE_DIR,'randomfor_parkins.pkl'), 'rb') as file_parkins:
+with open(r'E:\MDTM40\Project4_MultipleDisease\randomfor_parkins.pkl', 'rb') as file_parkins:
     parkinsons_model = pickle.load(file_parkins)
 
 # Streamlit UI name
@@ -133,6 +131,19 @@ if disease == '🫀 Liver Disease':
     col1, col2, col3 = st.columns(3)
     user_data = {}
 
+    default_values = {
+        'Age': 40.0,
+        'Total_Bilirubin': 1.0,
+        'Direct_Bilirubin': 0.2,
+        'Alkaline_Phosphotase': 100.0,
+        'Alamine_Aminotransferase': 30.0,
+        'Aspartate_Aminotransferase': 30.0,
+        'Total_Protiens': 6.5,
+        'Albumin': 3.5,
+        'Albumin_and_Globulin_Ratio': 1.0
+    }
+    
+
     for i, feature in enumerate(liver_features):
         if i % 3 == 0:
             col = col1
@@ -145,15 +156,13 @@ if disease == '🫀 Liver Disease':
             # Use same categories your encoder was trained on
             # Access the encoder for Gender
             gender_encoder = encoder_liver["Gender"]
-
             categories = list(gender_encoder.classes_)
             user_input = col.selectbox("Gender", categories)
-
-            # Encode using the trained encoder
             user_data[feature] = gender_encoder.transform([user_input])[0]
         else:
             user_data[feature] = col.number_input(
-                f"{feature}", min_value=0.0, format="%.2f"
+                f"{feature}", min_value=0.0,value=default_values.get(feature, 0.0), format="%.2f"
+
             )
 
     # Convert to DataFrame
@@ -166,18 +175,21 @@ if disease == '🫀 Liver Disease':
 
     if user_data and mid.button("🔍 Predict Disease"):
 
-        input_data = input_df[liver_features].values 
-
-        input_scaled = scaler_liver.transform(input_data)
-
-
-        prediction = liver_model.predict(input_scaled)
-
-        if prediction[0]==0:
-            st.balloons()
-            st.success("🎉 You are doing well! No disease detected at this time.")
+        numeric_values = [v for k, v in user_data.items() if k != "Gender"]
+        if all(v == 0.0 for v in numeric_values):
+            st.info("⚠️ Cannot predict. Please enter realistic patient data.")
         else:
-            st.warning("🩺 Attention: Signs of disease risk detected. Follow up with your doctor for detailed diagnosis.")
+            input_data = input_df[liver_features].values 
+
+            input_scaled = scaler_liver.transform(input_data)
+
+            prediction = liver_model.predict(input_scaled)
+
+            if prediction[0]==0:
+                st.balloons()
+                st.success("🎉 You are doing well! No disease detected at this time.")
+            else:
+                st.warning("🩺 Attention: Signs of disease risk detected. Follow up with your doctor for detailed diagnosis.")
 
 
 
@@ -312,8 +324,3 @@ if disease == "🧠 Parkinson’s Disease":
             st.success("💼 Great news! You are healthy and no signs of disease were detected.")
         else:
             st.warning("🩺 Attention: Signs of disease risk detected. Follow up with your doctor for detailed diagnosis.")
-
-
-
-
-
