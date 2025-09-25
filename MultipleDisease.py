@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import time
+import os
 
 import pickle
 from sklearn import preprocessing
@@ -325,5 +326,6 @@ if disease == "🧠 Parkinson’s Disease":
             st.success("💼 Great news! You are healthy and no signs of disease were detected.")
         else:
             st.warning("🩺 Attention: Signs of disease risk detected. Follow up with your doctor for detailed diagnosis.")
+
 
 
